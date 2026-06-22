@@ -1,0 +1,52 @@
+name: CI — Testes e Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Rodar testes Django
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Rodar migrations
+        env:
+          SECRET_KEY: chave-secreta-para-ci
+          DEBUG: 'True'
+          GITHUB_CLIENT_ID: fake-id
+          GITHUB_CLIENT_SECRET: fake-secret
+        run: python manage.py migrate
+
+      - name: Rodar testes
+        env:
+          SECRET_KEY: chave-secreta-para-ci
+          DEBUG: 'True'
+          GITHUB_CLIENT_ID: fake-id
+          GITHUB_CLIENT_SECRET: fake-secret
+        run: python manage.py test
+
+  docker:
+    name: Build da imagem Docker
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Build da imagem
+        run: docker build -t taskmanager:latest .

@@ -1,0 +1,52 @@
+{% extends 'tasks/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm prioridade-{{ tarefa.prioridade }}">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-card-text me-2"></i>Detalhes da Tarefa</h5>
+                <div class="btn-group btn-group-sm">
+                    <a href="/{{ tarefa.pk }}/editar/" class="btn btn-outline-primary">
+                        <i class="bi bi-pencil me-1"></i>Editar
+                    </a>
+                    <a href="/{{ tarefa.pk }}/deletar/" class="btn btn-outline-danger">
+                        <i class="bi bi-trash me-1"></i>Deletar
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4 class="{% if tarefa.concluida %}tarefa-concluida{% endif %}">
+                    {{ tarefa.titulo }}
+                </h4>
+                <div class="mb-3">
+                    <span class="badge
+                        {% if tarefa.prioridade == 'alta' %}bg-danger
+                        {% elif tarefa.prioridade == 'media' %}bg-warning text-dark
+                        {% else %}bg-success{% endif %}">
+                        Prioridade: {{ tarefa.get_prioridade_display }}
+                    </span>
+                    <span class="badge {% if tarefa.concluida %}bg-success{% else %}bg-secondary{% endif %} ms-1">
+                        {% if tarefa.concluida %}Concluída{% else %}Pendente{% endif %}
+                    </span>
+                </div>
+                {% if tarefa.descricao %}
+                    <p class="text-muted">{{ tarefa.descricao }}</p>
+                {% else %}
+                    <p class="text-muted fst-italic">Sem descrição.</p>
+                {% endif %}
+                <hr>
+                <small class="text-muted">
+                    <i class="bi bi-calendar-plus me-1"></i>Criada em: {{ tarefa.criada_em|date:"d/m/Y H:i" }}<br>
+                    <i class="bi bi-calendar-check me-1"></i>Atualizada em: {{ tarefa.atualizada_em|date:"d/m/Y H:i" }}
+                </small>
+            </div>
+            <div class="card-footer bg-white">
+                <a href="/" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i>Voltar para lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
