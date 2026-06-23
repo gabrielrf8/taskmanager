@@ -1,0 +1,16 @@
+# Gerenciador de Tarefas ##
+
+## Como rodar ##
+
+instalar dependencias:
+pip install -r requirements.txt
+
+criar o arquivo .env na raiz do projeto com as credenciais do GitHub OAuth
+
+rodar as migrations:
+python manage.py migrate
+
+subir o server:
+python manage.py runserver
+
+acessar: http://localhost:8000
